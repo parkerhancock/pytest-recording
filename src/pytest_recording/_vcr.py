@@ -9,7 +9,7 @@ from _pytest.config import Config
 from _pytest.mark.structures import Mark
 from vcr import VCR
 from vcr.cassette import CassetteContextDecorator
-from vcr.persisters.filesystem import FilesystemPersister
+from vcr.persisters.filesystem import FilesystemPersister, CassetteNotFoundError
 from vcr.serialize import deserialize
 
 from .utils import unique, unpack
@@ -49,7 +49,7 @@ class CombinedPersister(FilesystemPersister):
         requests, responses = starmap(unpack, zip(*all_content))
         requests, responses = list(requests), list(responses)
         if not requests or not responses:
-            raise ValueError("No cassettes found.")
+            raise CassetteNotFoundError()
         return requests, responses
 
 
